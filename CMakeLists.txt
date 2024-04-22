@@ -1,0 +1,52 @@
+cmake_minimum_required(VERSION 3.11.4)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+# wget -O cmake/PFL.cmake
+# https://github.com/black-desk/PFL.cmake/releases/latest/download/PFL.cmake
+include(PFL)
+
+set(ENABLE_CPM YES)
+if(CMAKE_VERSION VERSION_LESS "3.14")
+  set(ENABLE_CPM NO)
+endif()
+
+if(CPM_LOCAL_PACKAGES_ONLY)
+  set(ENABLE_CPM NO)
+endif()
+
+macro(cpm_add_dependencies)
+
+endmacro()
+
+if(NOT ENABLE_CPM)
+  message(STATUS "CPM.cmake disabled.")
+else()
+  # wget -O cmake/CPM.cmake
+  # https://github.com/cpm-cmake/CPM.cmake/releases/latest/download/CPM.cmake
+  include(CPM)
+  cpm_add_dependencies()
+endif()
+
+project(
+  argp-examples
+  VERSION 0.1.0
+  DESCRIPTION "example of using argp"
+  HOMEPAGE_URL "https://github.com/black-desk/argp"
+  LANGUAGES CXX)
+
+# wget -O cmake/GitSemver.cmake
+# https://github.com/black-desk/GitSemver.cmake/releases/latest/download/GitSemver.cmake
+include(GitSemver)
+gitsemver(PROJECT_VERSION)
+
+pfl_init()
+
+pfl_add_executable(
+  example
+  OUTPUT_NAME
+  example
+  SOURCES
+  ./src/blackdesk/example/argp.cpp
+  ./src/blackdesk/example/argp.hpp
+  ./src/main.cpp)
